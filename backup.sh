@@ -8,23 +8,16 @@
 ## author: Peter Hoffmann
 ## author: Uwe Grawert
 
-# exit on error
-set -e
-# be verbose
-set -x
-
-[ -x $(command -v tar) ]
-[ -x $(command -v date) ]
-[ -x $(command -v rsync) ]
-
-BACKUP_HOME="/backup/adminnode"
-BACKUP_RSYNC="${BACKUP_HOME}/TREE"
+BASEDIR=$(dirname $0)
+source ${BASEDIR}/config.sh
 TIMESTAMP=$(date --iso-8601=minutes)
 
-[ -d $BACKUP_HOME ] || mkdir -p $BACKUP_HOME
+set -e
+set -x
+
+[[ -d $BACKUP_HOME ]] || mkdir -p $BACKUP_HOME
 
 function backup_root_filesystem {
-
   rsync \
     --archive \
     --xattrs \
@@ -48,11 +41,9 @@ function backup_root_filesystem {
     --exclude='/var/log/lastlog' \
     --exclude='/var/tmp/*' \
     / $BACKUP_RSYNC 2> ${BACKUP_HOME}/error.log-${TIMESTAMP}
-
 }
 
 function create_backup_tarball {
-
   tar \
     --create \
     --gzip \
@@ -60,11 +51,8 @@ function create_backup_tarball {
     --file=${BACKUP_HOME}/${HOSTNAME}-${TIMESTAMP}.tar.gz \
     -C $BACKUP_RSYNC . \
     2>&1 | egrep -v 'leading|ignored' >> ${BACKUP_HOME}/error.log-${TIMESTAMP}
-
 }
 
 backup_root_filesystem
 
-if [ "$1" = "savestate" ]; then
-  create_backup_tarball
-fi
+[[ "$1" == "savestate" ]] && create_backup_tarball
