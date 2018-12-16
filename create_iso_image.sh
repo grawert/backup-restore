@@ -36,8 +36,8 @@ function copy_backup_to_rootfs {
     pushd $WORKDIR
 
     mkdir -p $BACKUPDIR
-    rsync -a $BACKUP_FILE $BACKUPDIR/backup.tar.gz
-    rsync -a $BASEDIR/restore.sh $BACKUPDIR/
+    rsync -a --update $BACKUP_FILE $BACKUPDIR/backup.tar.gz
+    rsync -a --update $BASEDIR/restore.sh $BACKUPDIR/
 
     rm -f $ROOTFS_FILE
     mksquashfs $ROOTFS_DIR $ROOTFS_FILE
