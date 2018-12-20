@@ -2,6 +2,8 @@
 
 ## Set global script variables
 
+RESTORE_ISO_FILE="restore.iso"
+
 #BACKUP_HOME="/backup/adminnode"
 BACKUP_HOME="/var/tmp"
 BACKUP_RSYNC="${BACKUP_HOME}/TREE"
@@ -9,9 +11,6 @@ BACKUP_FILE="${BACKUP_HOME}/backup.tar.gz"
 
 GRML_ISO="${BACKUP_HOME}/grml64-small_2017.05.iso"
 GRML_DIR="grml"
-ROOTFS_DIR="rootfs"
-ROOTFS_FILE="${GRML_DIR}/live/grml64-small/grml64-small.squashfs"
-RESTORE_ISO_FILE="restore.iso"
 
 ## check if we run as root user
 
@@ -23,4 +22,3 @@ RESTORE_ISO_FILE="restore.iso"
 [[ -x $(command -v date) ]] || { echo "date is not installed!"; exit 1; }
 [[ -x $(command -v rsync) ]] || { echo "rsnyc is not installed!"; exit 1; }
 [[ -x $(command -v mkisofs) ]] || { echo "mkisofs is not installed!"; exit 1; }
-[[ -x $(command -v mksquashfs) ]] || { echo "mksquashfs is not installed!"; exit 1; }

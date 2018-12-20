@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DISK=/dev/vda
+GRML_DCSDIR="/lib/live/mount/medium"
 
 parted $DISK mklabel gpt
 parted $DISK mkpart primary fat16 1M    213M	# /boot/efi
@@ -34,7 +35,7 @@ mount "${DISK}1" /mnt/boot/efi
 mount /dev/systemVG/LVvar /mnt/var
 mount /dev/systemVG/LVtftp /mnt/srv/tftpboot
 
-tar --verbose --extract --file=backup.tar.gz --directory=/mnt
+tar --verbose --extract --file="${GRML_DCSDIR}/backup.tar.gz" --directory=/mnt
 
 mount -o bind /dev /mnt/dev
 mount -o bind /sys /mnt/sys

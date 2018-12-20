@@ -13,7 +13,7 @@ set -x
 function unpack_grml_iso {
     pushd $WORKDIR
     
-    mkdir -p $GRML_DIR $ROOTFS_DIR
+    mkdir -p $GRML_DIR
 
     MOUNTDIR=$(mktemp -d)
 
@@ -21,32 +21,40 @@ function unpack_grml_iso {
     rsync -a $MOUNTDIR/ $GRML_DIR/
     umount $MOUNTDIR
 
-    mount -t squashfs -o loop $ROOTFS_FILE $MOUNTDIR
-    rsync -a $MOUNTDIR/ $ROOTFS_DIR/
-    umount $MOUNTDIR
-
     rmdir $MOUNTDIR
 
     popd
 }
 
-function copy_backup_to_rootfs {
-    BACKUPDIR="${ROOTFS_DIR}/backup"
-    
+function set_boot_parameters {
+    BOOTPARAMDIR="${GRML_DIR}/bootparams"
+
     pushd $WORKDIR
 
-    mkdir -p $BACKUPDIR
-    rsync -a --update $BACKUP_FILE $BACKUPDIR/backup.tar.gz
-    rsync -a --update $BASEDIR/restore.sh $BACKUPDIR/
+    mkdir -p $BOOTPARAMDIR
+    echo "scripts" > "${BOOTPARAMDIR}/bootparams"
 
-    rm -f $ROOTFS_FILE
-    mksquashfs $ROOTFS_DIR $ROOTFS_FILE
+    popd
+}
+
+function copy_restore_files_to_image {
+    SCRIPTSDIR="${GRML_DIR}/scripts"
+
+    pushd $WORKDIR
+
+    mkdir -p $SCRIPTSDIR
+    rsync -a --update "${BASEDIR}/restore.sh" "${SCRIPTSDIR}/00-restore.sh"
+    chmod 0755 "${SCRIPTSDIR}/00-restore.sh"
+
+    rsync -a --update $BACKUP_FILE "${GRML_DIR}/backup.tar.gz"
 
     popd
 }
 
 function create_restore_iso {
-    mkisofs -r -V "${HOSTNAME}-${TIMESTAMP}" \
+    mkisofs \
+     -r \
+     -V "${HOSTNAME}-${TIMESTAMP}" \
      -o $WORKDIR/$RESTORE_ISO_FILE \
      -c boot/isolinux/boot.cat \
      -b boot/isolinux/isolinux.bin \
@@ -59,5 +67,7 @@ function create_restore_iso {
 
 [[ -d "${WORKDIR}/${GRML_DIR}" && -d "${WORKDIR}/${ROOTFS_DIR}" ]] || unpack_grml_iso
 
-copy_backup_to_rootfs
+unpack_grml_iso
+set_boot_parameters
+copy_restore_files_to_image
 create_restore_iso
