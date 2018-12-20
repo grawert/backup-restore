@@ -1,7 +1,9 @@
 #!/bin/bash
 
-DISK=/dev/vda
-GRML_DCSDIR="/lib/live/mount/medium"
+DISK='/dev/vda'
+ROOTFS_MOUNT='/mnt'
+GRML_DCSDIR='/lib/live/mount/medium'
+EXT4_FEATURES='^metadata_csum,uninit_bg'
 
 parted $DISK mklabel gpt
 parted $DISK mkpart primary fat16 1M    213M	# /boot/efi
@@ -23,34 +25,40 @@ lvcreate --name LVtftp --size 1G systemVG
 
 mkfs -t vfat "${DISK}1"
 mkfs -t ext3 "${DISK}2"
-mkfs -t ext4 /dev/systemVG/LVRoot
-mkfs -t ext4 /dev/systemVG/LVvar
+mkfs -t ext4 -O $EXT4_FEATURES /dev/systemVG/LVRoot
+mkfs -t ext4 -O $EXT4_FEATURES /dev/systemVG/LVvar
 mkfs -t ext3 /dev/systemVG/LVtftp
 
-mount /dev/systemVG/LVRoot /mnt
-mkdir -p /mnt/boot /mnt/srv/tftpboot /mnt/var
-mount "${DISK}2" /mnt/boot
-mkdir /mnt/boot/efi
-mount "${DISK}1" /mnt/boot/efi
-mount /dev/systemVG/LVvar /mnt/var
-mount /dev/systemVG/LVtftp /mnt/srv/tftpboot
+mkswap /dev/mapper/systemVG-LVSwap
 
-tar --verbose --extract --file="${GRML_DCSDIR}/backup.tar.gz" --directory=/mnt
+mount /dev/systemVG/LVRoot $ROOTFS_MOUNT
+mkdir -p $ROOTFS_MOUNT/boot $ROOTFS_MOUNT/srv/tftpboot
+mount "${DISK}2" $ROOTFS_MOUNT/boot
+mkdir $ROOTFS_MOUNT/boot/efi
+mount "${DISK}1" $ROOTFS_MOUNT/boot/efi
+mount /dev/systemVG/LVtftp $ROOTFS_MOUNT/srv/tftpboot
 
-mount -o bind /dev /mnt/dev
-mount -o bind /sys /mnt/sys
-mount -t proc /proc /mnt/proc
+tar --verbose --extract --file="${GRML_DCSDIR}/backup.tar.gz" --directory=$ROOTFS_MOUNT
 
-cat > /mnt/etc/fstab <<EOF
-devpts /dev/pts devpts mode=0620,gid=5 0 0
-proc /proc proc defautls 0 0
+mount -o bind /dev $ROOTFS_MOUNT/dev
+mount -o bind /sys $ROOTFS_MOUNT/sys
+mount -t proc /proc $ROOTFS_MOUNT/proc
 
-/dev/systemVG/LVRoot / ext4 defaults 1 1
-/dev/${DISK}2 /boot ext3 defaults 1 2
-/dev/${DISK}1 /boot/efi vfat defaults 0 0
-/dev/systemVG/LVRoot / ext4 defaults 1 1
+cat > $ROOTFS_MOUNT/etc/fstab <<EOF
+/dev/systemVG/LVSwap swap                 swap       defaults              0 0
+/dev/systemVG/LVRoot /                    ext4       defaults              1 1
+${DISK}2             /boot                ext3       defaults              1 2
+${DISK}1             /boot/efi            vfat       umask=0002,utf8=true  0 0
+/dev/systemVG/LVtftp /srv/tftpboot        ext3       defaults              1 2
+/dev/systemVG/LVvar  /var                 ext4       defaults              1 2
 EOF
 
-chroot /mnt grub2-mkconfig -o /boot/grub2/grub.cfg
-chroot /mnt grub2-mkconfig -o /boot/efi/EFI/sles/grub.cfg
-chroot /mnt grub2-install $DISK
+chroot $ROOTFS_MOUNT grub2-mkconfig -o /boot/grub2/grub.cfg
+chroot $ROOTFS_MOUNT grub2-mkconfig -o /boot/efi/EFI/sles/grub.cfg
+chroot $ROOTFS_MOUNT grub2-install $DISK
+
+for KERNEL in $(ls $ROOTFS_MOUNT/boot/vmlinuz-*); do
+    [[ $KERNEL =~ vmlinuz-(.*) ]] || { echo "Could not extract Kernel version"; exit 1; }
+    KERNEL_VERSION=${BASH_REMATCH[1]}
+    chroot $ROOTFS_MOUNT dracut --force --kver $KERNEL_VERSION
+done
