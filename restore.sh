@@ -3,7 +3,7 @@
 DISK='/dev/vda'
 ROOTFS_MOUNT='/mnt'
 GRML_DCSDIR='/lib/live/mount/medium'
-EXT4_FEATURES='^metadata_csum,has_journal,extent,huge_file,flex_bg,uninit_bg,dir_nlink,extra_isize'
+EXT4_FEATURES='^metadata_csum'
 
 parted $DISK mklabel gpt
 parted $DISK mkpart primary fat16 1M    213M	# /boot/efi
@@ -32,13 +32,22 @@ mkfs -t ext3 /dev/systemVG/LVtftp
 mkswap /dev/mapper/systemVG-LVSwap
 
 mount /dev/systemVG/LVRoot $ROOTFS_MOUNT
-mkdir -p $ROOTFS_MOUNT/boot $ROOTFS_MOUNT/srv/tftpboot
+mkdir -p $ROOTFS_MOUNT/boot
+mkdir -p $ROOTFS_MOUNT/srv/tftpboot
+mkdir -p $ROOTFS_MOUNT/var
 mount "${DISK}2" $ROOTFS_MOUNT/boot
 mkdir $ROOTFS_MOUNT/boot/efi
 mount "${DISK}1" $ROOTFS_MOUNT/boot/efi
 mount /dev/systemVG/LVtftp $ROOTFS_MOUNT/srv/tftpboot
+mount /dev/systemVG/LVvar $ROOTFS_MOUNT/var
 
-tar --verbose --extract --same-owner --file="${GRML_DCSDIR}/backup.tar.gz" --directory=$ROOTFS_MOUNT
+tar \
+    --verbose \
+    --extract \
+    --acls \
+    --xattrs \
+    --file="${GRML_DCSDIR}/backup.tar.gz" \
+    --directory=$ROOTFS_MOUNT
 
 mount -o bind /dev $ROOTFS_MOUNT/dev
 mount -o bind /sys $ROOTFS_MOUNT/sys

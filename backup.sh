@@ -48,6 +48,9 @@ function create_backup_tarball {
     tar \
       --create \
       --gzip \
+      --acls \
+      --xattrs \
+      --label="${HOSTNAME}-${TIMESTAMP}" \
       --file="${BACKUP_HOME}/${TARBALL}" \
       --directory="${RSYNC_DIR}" .
 
