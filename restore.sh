@@ -3,7 +3,7 @@
 DISK='/dev/vda'
 ROOTFS_MOUNT='/mnt'
 GRML_DCSDIR='/lib/live/mount/medium'
-EXT4_FEATURES='^metadata_csum,uninit_bg'
+EXT4_FEATURES='^metadata_csum,has_journal,extent,huge_file,flex_bg,uninit_bg,dir_nlink,extra_isize'
 
 parted $DISK mklabel gpt
 parted $DISK mkpart primary fat16 1M    213M	# /boot/efi
@@ -38,7 +38,7 @@ mkdir $ROOTFS_MOUNT/boot/efi
 mount "${DISK}1" $ROOTFS_MOUNT/boot/efi
 mount /dev/systemVG/LVtftp $ROOTFS_MOUNT/srv/tftpboot
 
-tar --verbose --extract --file="${GRML_DCSDIR}/backup.tar.gz" --directory=$ROOTFS_MOUNT
+tar --verbose --extract --same-owner --file="${GRML_DCSDIR}/backup.tar.gz" --directory=$ROOTFS_MOUNT
 
 mount -o bind /dev $ROOTFS_MOUNT/dev
 mount -o bind /sys $ROOTFS_MOUNT/sys

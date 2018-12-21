@@ -2,15 +2,16 @@
 
 ## Set global script variables
 
-RESTORE_ISO_FILE="restore.iso"
-
 #BACKUP_HOME="/backup/adminnode"
 BACKUP_HOME="/var/tmp"
-BACKUP_RSYNC="${BACKUP_HOME}/TREE"
-BACKUP_FILE="${BACKUP_HOME}/backup.tar.gz"
 
+RESTORE_ISO_FILE="${BACKUP_HOME}/restore.iso"
 GRML_ISO="${BACKUP_HOME}/grml64-small_2017.05.iso"
-GRML_DIR="grml"
+GRML_DIR="${BACKUP_HOME}/grml"
+RSYNC_DIR="${BACKUP_HOME}/TREE"
+
+LATEST_BACKUP="backup.tar.gz"
+DISKINFO_FILE='diskinfo.txt'
 
 ## check if we run as root user
 
@@ -21,4 +22,6 @@ GRML_DIR="grml"
 [[ -x $(command -v tar) ]] || { echo "tar is not installed!"; exit 1; }
 [[ -x $(command -v date) ]] || { echo "date is not installed!"; exit 1; }
 [[ -x $(command -v rsync) ]] || { echo "rsnyc is not installed!"; exit 1; }
+[[ -x $(command -v lsblk) ]] || { echo "lsblk is not installed!"; exit 1; }
+[[ -x $(command -v parted) ]] || { echo "parted is not installed!"; exit 1; }
 [[ -x $(command -v mkisofs) ]] || { echo "mkisofs is not installed!"; exit 1; }
