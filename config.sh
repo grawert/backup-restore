@@ -2,8 +2,7 @@
 
 ## Set global script variables
 
-#BACKUP_HOME="/backup/adminnode"
-BACKUP_HOME="/var/tmp"
+BACKUP_HOME="/backup/adminnode"
 
 RESTORE_ISO_FILE="${BACKUP_HOME}/restore.iso"
 GRML_ISO="${BACKUP_HOME}/grml64-small_2017.05.iso"
