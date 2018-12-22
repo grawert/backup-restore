@@ -53,7 +53,7 @@ function create_restore_iso {
      -b boot/isolinux/isolinux.bin \
      -no-emul-boot -boot-load-size 4 -boot-info-table \
      -eltorito-alt-boot \
-     -eltorito-platform 0xEF -eltorito-boot boot/efi.img \
+     -eltorito-platform "efi" -eltorito-boot boot/efi.img \
      -no-emul-boot \
      $GRML_DIR
 }
