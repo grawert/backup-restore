@@ -62,12 +62,12 @@ ${DISK}1             /boot/efi            vfat       umask=0002,utf8=true  0 0
 /dev/systemVG/LVvar  /var                 ext4       defaults              1 2
 EOF
 
-chroot $ROOTFS_MOUNT grub2-mkconfig -o /boot/grub2/grub.cfg
-chroot $ROOTFS_MOUNT grub2-mkconfig -o /boot/efi/EFI/sles/grub.cfg
-chroot $ROOTFS_MOUNT grub2-install $DISK
-
 for KERNEL in $(ls $ROOTFS_MOUNT/boot/vmlinuz-*); do
     [[ $KERNEL =~ vmlinuz-(.*) ]] || { echo "Could not extract Kernel version"; exit 1; }
     KERNEL_VERSION=${BASH_REMATCH[1]}
     chroot $ROOTFS_MOUNT dracut --force --kver $KERNEL_VERSION
 done
+
+chroot $ROOTFS_MOUNT grub2-mkconfig -o /boot/grub2/grub.cfg
+chroot $ROOTFS_MOUNT grub2-mkconfig -o /boot/efi/EFI/sles/grub.cfg
+chroot $ROOTFS_MOUNT grub2-install $DISK
