@@ -40,8 +40,12 @@ function copy_restore_files_to_image {
     rsync -a --update "${BASEDIR}/restore.sh" "${SCRIPTSDIR}/00-restore.sh"
     chmod 0755 "${SCRIPTSDIR}/00-restore.sh"
 
-    rsync -a --update "${BACKUP_HOME}/${LATEST_BACKUP}" "${GRML_DIR}/${LATEST_BACKUP}"
-    rsync -a --update "${BACKUP_HOME}/${DISKINFO_FILE}" "${GRML_DIR}/${DISKINFO_FILE}"
+    rsync -a --update --copy-links \
+        "${BACKUP_HOME}/${LATEST_BACKUP}" \
+        "${GRML_DIR}/${LATEST_BACKUP}"
+    rsync -a --update \
+        "${BACKUP_HOME}/${DISKINFO_FILE}" \
+        "${GRML_DIR}/${DISKINFO_FILE}"
 }
 
 function create_restore_iso {
@@ -49,11 +53,13 @@ function create_restore_iso {
      -r \
      -V "${HOSTNAME}-${TIMESTAMP}" \
      -o $RESTORE_ISO_FILE \
-     -c boot/isolinux/boot.cat \
-     -b boot/isolinux/isolinux.bin \
-     -no-emul-boot -boot-load-size 4 -boot-info-table \
+     -eltorito-catalog boot/isolinux/boot.cat \
+     -eltorito-boot boot/isolinux/isolinux.bin \
+     -no-emul-boot \
+     -boot-load-size 4 \
+     -boot-info-table \
      -eltorito-alt-boot \
-     -eltorito-platform "efi" -eltorito-boot boot/efi.img \
+     -eltorito-boot boot/efi.img \
      -no-emul-boot \
      $GRML_DIR
 }
