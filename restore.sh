@@ -3,6 +3,7 @@
 DISK='/dev/vda'
 ROOTFS_MOUNT='/mnt'
 GRML_DCSDIR='/lib/live/mount/medium'
+BACKUP="${GRML_DCSDIR}/backup.tar.gz"
 EXT4_FEATURES='^metadata_csum'
 
 parted $DISK mklabel gpt
@@ -46,8 +47,8 @@ tar \
     --extract \
     --acls \
     --xattrs \
-    --file="${GRML_DCSDIR}/backup.tar.gz" \
-    --directory=$ROOTFS_MOUNT
+    --file="${BACKUP}" \
+    --directory="${ROOTFS_MOUNT}"
 
 mount -o bind /dev $ROOTFS_MOUNT/dev
 mount -o bind /sys $ROOTFS_MOUNT/sys
