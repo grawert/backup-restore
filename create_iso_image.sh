@@ -11,15 +11,15 @@ set -e
 set -x
 
 function unpack_grml_iso {
-    mkdir -p $GRML_DIR
+    mkdir -p "$GRML_DIR"
 
     MOUNTDIR=$(mktemp -d)
 
-    mount -o loop $GRML_ISO $MOUNTDIR
-    rsync -a $MOUNTDIR/ $GRML_DIR/
-    umount $MOUNTDIR
+    mount -o loop "${GRML_ISO}" "${MOUNTDIR}"
+    rsync -a "${MOUNTDIR}/" "${GRML_DIR}/"
+    umount "${MOUNTDIR}"
 
-    rmdir $MOUNTDIR
+    rmdir "${MOUNTDIR}"
 }
 
 function set_boot_parameters {
@@ -27,7 +27,7 @@ function set_boot_parameters {
 
     pushd $WORKDIR
 
-    mkdir -p $BOOTPARAMDIR
+    mkdir -p "${BOOTPARAMDIR}"
     echo "scripts" > "${BOOTPARAMDIR}/bootparams"
 
     popd
@@ -36,7 +36,7 @@ function set_boot_parameters {
 function copy_restore_files_to_image {
     SCRIPTSDIR="${GRML_DIR}/scripts"
 
-    mkdir -p $SCRIPTSDIR
+    mkdir -p "${SCRIPTSDIR}"
     rsync -a --update "${BASEDIR}/restore.sh" "${SCRIPTSDIR}/00-restore.sh"
     chmod 0755 "${SCRIPTSDIR}/00-restore.sh"
 
@@ -52,7 +52,7 @@ function create_restore_iso {
     mkisofs \
      -r \
      -V "${HOSTNAME}-${TIMESTAMP}" \
-     -o $RESTORE_ISO_FILE \
+     -o "${RESTORE_ISO_FILE}" \
      -eltorito-catalog boot/isolinux/boot.cat \
      -eltorito-boot boot/isolinux/isolinux.bin \
      -no-emul-boot \
@@ -61,7 +61,7 @@ function create_restore_iso {
      -eltorito-alt-boot \
      -eltorito-boot boot/efi.img \
      -no-emul-boot \
-     $GRML_DIR
+     "${GRML_DIR}"
 }
 
 [[ -d "${GRML_DIR}" ]] || unpack_grml_iso

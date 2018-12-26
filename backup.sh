@@ -35,13 +35,13 @@ function backup_root_filesystem {
 }
 
 function save_diskinfo {
-    [[ -f ${BACKUP_HOME}/${DISKINFO_FILE} ]] && return
+    [[ -f "${BACKUP_HOME}/${DISKINFO_FILE}" ]] && return
 
     for BLOCK_DEVICE in $(lsblk -d -o KNAME | grep -v 'sr[0-9]\|KNAME'); do
-        parted /dev/${BLOCK_DEVICE} print free >> ${BACKUP_HOME}/${DISKINFO_FILE}
+        parted "/dev/${BLOCK_DEVICE}" print free >> "${BACKUP_HOME}/${DISKINFO_FILE}"
     done
 
-    lsblk -fs >> ${BACKUP_HOME}/${DISKINFO_FILE}
+    lsblk -fs >> "${BACKUP_HOME}/${DISKINFO_FILE}"
 }
 
 function create_backup_tarball {
@@ -57,8 +57,8 @@ function create_backup_tarball {
     ln --symbolic --force "${BACKUP_HOME}/${TARBALL}" "${BACKUP_HOME}/${LATEST_BACKUP}"
 }
 
-[[ -d $BACKUP_HOME ]] || mkdir -p $BACKUP_HOME
-[[ -d $RSYNC_DIR ]] || mkdir -p $RSYNC_DIR
+[[ -d "$BACKUP_HOME" ]] || mkdir -p "$BACKUP_HOME"
+[[ -d "$RSYNC_DIR" ]] || mkdir -p "$RSYNC_DIR"
 
 save_diskinfo
 backup_root_filesystem
