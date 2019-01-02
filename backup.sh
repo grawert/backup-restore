@@ -26,7 +26,6 @@ function backup_root_filesystem {
       --exclude='/mnt/*' \
       --exclude='/tmp/*' \
       --exclude='/srv/www/htdocs/*' \
-      --exclude='/var/cache/*' \
       --exclude='/var/chef/cache/*' \
       --exclude='/var/log/lastlog' \
       --exclude='/var/tmp/*' \
@@ -50,6 +49,7 @@ function create_backup_tarball {
       --gzip \
       --acls \
       --xattrs \
+      --force-local \
       --label="${HOSTNAME}-${TIMESTAMP}" \
       --file="${BACKUP_HOME}/${TARBALL}" \
       --directory="${RSYNC_DIR}" .
