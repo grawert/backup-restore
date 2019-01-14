@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 DISK='/dev/vda'
 ROOTFS_MOUNT='/mnt'
 GRML_DCSDIR='/lib/live/mount/medium'
