@@ -14,6 +14,8 @@ fi
 [[ -z "$2" ]] || ISO_IMAGE=$2
 
 qemu-system-x86_64 \
+ -no-user-config \
+ -nographic \
  -m 1024 \
  -enable-kvm \
  -name "restore-to-vm" \
