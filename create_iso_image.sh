@@ -22,6 +22,13 @@ function unpack_grml_iso {
     rmdir "${MOUNTDIR}"
 }
 
+function grub_enable_serial_console {
+    GRUBDIR="${GRML_DIR}/boot/grub"
+    rsync -a --update \
+        "${BASEDIR}/grml-grub-boot-entry.cfg" \
+        "${GRUBDIR}/00-serial_default.cfg"
+}
+
 function set_boot_parameters {
     BOOTPARAMDIR="${GRML_DIR}/bootparams"
 
@@ -65,5 +72,6 @@ function create_restore_iso {
 
 unpack_grml_iso
 set_boot_parameters
+grub_enable_serial_console
 copy_restore_files_to_image
 create_restore_iso
