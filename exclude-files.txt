@@ -1,0 +1,14 @@
+/lost+found
+/backup_2nd_BB/*
+/docker-backup/*
+/dev/*
+/proc/*
+/sys/*
+/run/*
+/home/*
+/mnt/*
+/tmp/*
+/srv/www/htdocs/*
+/var/chef/cache/*
+/var/log/lastlog
+/var/tmp/*

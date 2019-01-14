@@ -18,21 +18,8 @@ function backup_root_filesystem {
       --hard-links \
       --delete-after \
       --numeric-ids \
-      --exclude='/lost+found' \
-      --exclude='/backup_2nd_BB/*' \
-      --exclude='/docker-backup/*' \
-      --exclude='/dev/*' \
-      --exclude='/proc/*' \
-      --exclude='/sys/*' \
-      --exclude='/run/*' \
-      --exclude='/home/*' \
-      --exclude='/mnt/*' \
-      --exclude='/tmp/*' \
-      --exclude='/srv/www/htdocs/*' \
-      --exclude='/var/chef/cache/*' \
-      --exclude='/var/log/lastlog' \
-      --exclude='/var/tmp/*' \
       --exclude="${BACKUP_HOME}/*" \
+      --exclude-from="${BASEDIR}/exclude-files.txt" \
       / $RSYNC_DIR 2> ${BACKUP_HOME}/error.log-${TIMESTAMP}
 }
 
