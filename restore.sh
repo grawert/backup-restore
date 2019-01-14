@@ -51,7 +51,7 @@ cat ${BACKUP}* | tar \
     --acls \
     --xattrs \
     --directory="${ROOTFS_MOUNT}" \
-    -
+    --file=-
 
 mount -o bind /dev "${ROOTFS_MOUNT}/dev"
 mount -o bind /sys "${ROOTFS_MOUNT}/sys"
