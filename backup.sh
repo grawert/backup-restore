@@ -5,6 +5,7 @@
 
 BASEDIR=$(dirname $0)
 source ${BASEDIR}/config.sh
+FQDN=$(hostname --fqdn)
 TIMESTAMP=$(date --iso-8601=minutes)
 TARBALL="${HOSTNAME}-${TIMESTAMP}.tar.gz"
 
@@ -40,7 +41,7 @@ function create_backup_tarball {
       --acls \
       --xattrs \
       --force-local \
-      --label="${HOSTNAME}-${TIMESTAMP}" \
+      --label="${FQDN}-${TIMESTAMP}" \
       --file="${BACKUP_HOME}/${TARBALL}" \
       --directory="${RSYNC_DIR}" . \
       >> ${BACKUP_HOME}/error.log-${TIMESTAMP} 2>&1
