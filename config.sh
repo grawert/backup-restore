@@ -11,6 +11,8 @@ RSYNC_DIR="${BACKUP_HOME}/TREE"
 
 LATEST_BACKUP="backup.tar.gz"
 DISKINFO_FILE='diskinfo.txt'
+TAR_SPLIT_VOLUME_NAME="backup"
+ISO_MAX_FILE_SIZE="2G"
 
 ## check if we run as root user
 

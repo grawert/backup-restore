@@ -43,12 +43,12 @@ function copy_restore_files_to_image {
     rsync -a --update "${BASEDIR}/restore.sh" "${SCRIPTSDIR}/00-restore.sh"
     chmod 0755 "${SCRIPTSDIR}/00-restore.sh"
 
-    rsync -a --update --copy-links \
-        "${BACKUP_HOME}/${LATEST_BACKUP}" \
-        "${GRML_DIR}/${LATEST_BACKUP}"
     rsync -a --update \
         "${BACKUP_HOME}/${DISKINFO_FILE}" \
         "${GRML_DIR}/${DISKINFO_FILE}"
+
+    zcat "${BACKUP_HOME}/${LATEST_BACKUP}" | \
+        split -d -b $ISO_MAX_FILE_SIZE - "${GRML_DIR}/${TAR_SPLIT_VOLUME_NAME}"
 }
 
 function create_restore_iso {
