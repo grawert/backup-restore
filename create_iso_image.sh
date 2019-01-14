@@ -49,6 +49,7 @@ function create_restore_iso {
      -r \
      -V "${HOSTNAME}-${TIMESTAMP}" \
      -o "${RESTORE_ISO_FILE}" \
+     -allow-limited-size \
      -eltorito-catalog boot/isolinux/boot.cat \
      -eltorito-boot boot/isolinux/isolinux.bin \
      -no-emul-boot \
