@@ -5,7 +5,7 @@ set -e
 DISK='/dev/vda'
 ROOTFS_MOUNT='/mnt'
 GRML_DCSDIR='/lib/live/mount/medium'
-BACKUP="${GRML_DCSDIR}/backup.tar.gz"
+BACKUP="${GRML_DCSDIR}/backup"
 EXT4_FEATURES='^metadata_csum'
 GRUB_EFI_CFG='/boot/efi/EFI/sles/grub.cfg'
 
@@ -45,13 +45,13 @@ mount "${DISK}1" "${ROOTFS_MOUNT}/boot/efi"
 mount /dev/systemVG/LVtftp "${ROOTFS_MOUNT}/srv/tftpboot"
 mount /dev/systemVG/LVvar "${ROOTFS_MOUNT}/var"
 
-tar \
+cat "${BACKUP}" | tar \
     --verbose \
     --extract \
     --acls \
     --xattrs \
-    --file="${BACKUP}" \
-    --directory="${ROOTFS_MOUNT}"
+    --directory="${ROOTFS_MOUNT}" \
+    -
 
 mount -o bind /dev "${ROOTFS_MOUNT}/dev"
 mount -o bind /sys "${ROOTFS_MOUNT}/sys"
