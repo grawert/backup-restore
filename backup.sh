@@ -1,5 +1,8 @@
 #!/bin/bash
 
+## Create backup of root filesystem
+## Create a backup tarball when called with parameter "savestate"
+
 BASEDIR=$(dirname $0)
 source ${BASEDIR}/config.sh
 TIMESTAMP=$(date --iso-8601=minutes)
