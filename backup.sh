@@ -20,7 +20,7 @@ function backup_root_filesystem {
       --numeric-ids \
       --exclude="${BACKUP_HOME}/*" \
       --exclude-from="${BASEDIR}/exclude-files.txt" \
-      / $RSYNC_DIR 2> ${BACKUP_HOME}/error.log-${TIMESTAMP}
+      / $RSYNC_DIR >> ${BACKUP_HOME}/error.log-${TIMESTAMP} 2>&1
 }
 
 function save_diskinfo {
@@ -42,7 +42,8 @@ function create_backup_tarball {
       --force-local \
       --label="${HOSTNAME}-${TIMESTAMP}" \
       --file="${BACKUP_HOME}/${TARBALL}" \
-      --directory="${RSYNC_DIR}" .
+      --directory="${RSYNC_DIR}" . \
+      >> ${BACKUP_HOME}/error.log-${TIMESTAMP} 2>&1
 
     ln --symbolic --force "${BACKUP_HOME}/${TARBALL}" "${BACKUP_HOME}/${LATEST_BACKUP}"
 }
