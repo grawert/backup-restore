@@ -33,7 +33,7 @@ function set_boot_parameters {
     BOOTPARAMDIR="${GRML_DIR}/bootparams"
 
     mkdir -p "${BOOTPARAMDIR}"
-    echo "scripts" > "${BOOTPARAMDIR}/bootparams"
+    echo "lvm scripts" > "${BOOTPARAMDIR}/bootparams"
 }
 
 function copy_restore_files_to_image {
