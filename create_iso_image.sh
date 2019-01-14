@@ -25,12 +25,8 @@ function unpack_grml_iso {
 function set_boot_parameters {
     BOOTPARAMDIR="${GRML_DIR}/bootparams"
 
-    pushd $WORKDIR
-
     mkdir -p "${BOOTPARAMDIR}"
     echo "scripts" > "${BOOTPARAMDIR}/bootparams"
-
-    popd
 }
 
 function copy_restore_files_to_image {
