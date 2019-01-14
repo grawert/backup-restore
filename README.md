@@ -1,7 +1,8 @@
 # File Based Backup & Restore
 
 Scripts to make a file based backup of a Linux filesystem using _rsync_ and
-_tar_. Restore is using a _GRML_ rescue image containing the backup tarball.
+_tar_. Restore is using a [GRML](http://grml.org/) rescue image containing the
+backup tarball.
 
 ## Configuration
 
