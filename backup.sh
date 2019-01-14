@@ -64,6 +64,6 @@ function create_backup_tarball {
 [[ -d "$RSYNC_DIR" ]] || mkdir -p "$RSYNC_DIR"
 
 save_diskinfo
-backup_root_filesystem
 
-[[ "$1" == "savestate" ]] && create_backup_tarball
+[[ "$1" == "backup" ]] && backup_root_filesystem
+[[ "$1" == "tar" ]] && create_backup_tarball
