@@ -45,7 +45,7 @@ mount "${DISK}1" "${ROOTFS_MOUNT}/boot/efi"
 mount /dev/systemVG/LVtftp "${ROOTFS_MOUNT}/srv/tftpboot"
 mount /dev/systemVG/LVvar "${ROOTFS_MOUNT}/var"
 
-cat "${BACKUP}" | tar \
+cat ${BACKUP}* | tar \
     --verbose \
     --extract \
     --acls \
