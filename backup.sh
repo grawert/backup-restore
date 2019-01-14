@@ -1,7 +1,7 @@
 #!/bin/bash
 
-## Create backup of root filesystem
-## Create a backup tarball when called with parameter "savestate"
+## Create backup of root filesystem when called with parameter `backup`
+## Create a backup tarball when called with parameter `tar`
 
 BASEDIR=$(dirname $0)
 source ${BASEDIR}/config.sh

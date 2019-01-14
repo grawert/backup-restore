@@ -19,12 +19,16 @@ curl -O -L http://download.grml.org/grml64-small_2017.05.iso
 
 ## Backup
 
-Create a backup of the filesystem with rsync. The parameter `savestate` is
-creating a tarball of the backed up files. The tarball will be saved to
-`BACKUP_HOME` directory.
+Create a backup of the filesystem with rsync. The parameter `backup` is creating
+a backup tree of the filesystem at `BACKUP_HOME`. The parameter `tar` will
+create a tarball which is saved to `BACKUP_HOME` directory.
 
 ```shell
-bash backup.sh savestate
+bash backup.sh backup
+```
+
+```shell
+bash backup.sh tar
 ```
 
 ## Create the rescue image
