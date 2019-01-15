@@ -7,7 +7,7 @@ ROOTFS_MOUNT='/mnt'
 GRML_DCSDIR='/lib/live/mount/medium'
 BACKUP="${GRML_DCSDIR}/backup"
 EXT4_FEATURES='^metadata_csum'
-GRUB_EFI_CFG='/boot/efi/EFI/sles/grub.cfg'
+GRUB_EFI_CFG='/boot/efi/EFI/BOOT/grub.cfg'
 
 parted $DISK mklabel gpt
 parted $DISK mkpart primary fat16 1M    213M	# /boot/efi
