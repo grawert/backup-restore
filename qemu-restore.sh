@@ -17,7 +17,6 @@ fi
 qemu-system-x86_64 \
  -no-user-config \
  -nographic \
- -net none \
  -m 1024 \
  -enable-kvm \
  -name "restore-to-vm" \
@@ -27,4 +26,8 @@ qemu-system-x86_64 \
  -drive file="${RESTORE_ISO_FILE}",format=raw,if=none,readonly=on,id=cd0 \
  -device ide-cd,bus=ide.0,unit=0,drive=cd0,id=ide0-0-0,bootindex=3 \
  -drive file="${DISK}",format=${DISK_FORMAT},if=none,id=d0 \
- -device virtio-blk-pci,drive=d0,id=vda,bootindex=2
+ -device virtio-blk-pci,drive=d0,id=vda,bootindex=2 \
+ -netdev user,id=hostnet0,restrict=y \
+ -device virtio-net-pci,netdev=hostnet0,id=net0,mac=52:54:00:35:de:01 \
+ -netdev user,id=hostnet1,restrict=y \
+ -device virtio-net-pci,netdev=hostnet1,id=net1,mac=52:54:00:35:de:02
