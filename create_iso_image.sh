@@ -56,7 +56,6 @@ function create_restore_iso {
      -r \
      -V "${HOSTNAME}-${TIMESTAMP}" \
      -o "${RESTORE_ISO_FILE}" \
-     -allow-limited-size \
      -eltorito-catalog boot/isolinux/boot.cat \
      -eltorito-boot boot/isolinux/isolinux.bin \
      -no-emul-boot \
@@ -70,7 +69,6 @@ function create_restore_iso {
 
 [[ -d "${GRML_DIR}" ]] || unpack_grml_iso
 
-unpack_grml_iso
 set_boot_parameters
 grub_enable_serial_console
 copy_restore_files_to_image
