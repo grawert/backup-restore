@@ -55,7 +55,7 @@ bash create_iso_image.sh
 # Boot rescue image using qemu
 
 For testing purposes the restore image can be booted in isolated environment
-using qemu.
+using qemu. The network interface configuration might have to be adapted.
 
 ```shell
 bash qemu-restore.sh
