@@ -22,10 +22,17 @@ parted $DISK set 1 boot on
 pvcreate "${DISK}3"
 vgcreate systemVG "${DISK}3"
 
-lvcreate --name LVRoot --size 5G systemVG
-lvcreate --name LVSwap --size 1G systemVG
-lvcreate --name LVvar --size 1G systemVG
-lvcreate --name LVtftp --size 1G systemVG
+if cat /proc/cpuinfo | grep -q QEMU; then
+    lvcreate --name LVRoot --size 20G systemVG
+    lvcreate --name LVSwap --size  1G systemVG
+    lvcreate --name LVvar --size  16G systemVG
+    lvcreate --name LVtftp --size 10G systemVG
+else
+    lvcreate --name LVRoot --size  62G systemVG
+    lvcreate --name LVSwap --size   1G systemVG
+    lvcreate --name LVvar --size   80G systemVG
+    lvcreate --name LVtftp --size 100G systemVG
+fi
 
 mkfs -t vfat "${DISK}1"
 mkfs -t ext3 "${DISK}2"
