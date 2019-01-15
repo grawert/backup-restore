@@ -17,7 +17,7 @@ fi
 qemu-system-x86_64 \
  -no-user-config \
  -nographic \
- -m 1024 \
+ -m 4G \
  -enable-kvm \
  -name "restore-to-vm" \
  -bios "${EFI_FIRMWARE}" \
@@ -28,6 +28,6 @@ qemu-system-x86_64 \
  -drive file="${DISK}",format=${DISK_FORMAT},if=none,id=d0 \
  -device virtio-blk-pci,drive=d0,id=vda,bootindex=2 \
  -netdev user,id=hostnet0,restrict=y \
- -device virtio-net-pci,netdev=hostnet0,id=net0,mac=52:54:00:35:de:01 \
+ -device virtio-net-pci,netdev=hostnet0,id=net0,mac="00:25:b5:a0:00:fe" \
  -netdev user,id=hostnet1,restrict=y \
- -device virtio-net-pci,netdev=hostnet1,id=net1,mac=52:54:00:35:de:02
+ -device virtio-net-pci,netdev=hostnet1,id=net1,mac="00:25:b5:b0:02:d0"
