@@ -12,6 +12,16 @@ TARBALL="${HOSTNAME}-${TIMESTAMP}.tar.gz"
 set -e
 set -x
 
+function save_diskinfo {
+    [[ -f "${BACKUP_HOME}/${DISKINFO_FILE}" ]] && return
+
+    for BLOCK_DEVICE in $(lsblk -d -o KNAME | grep -v 'sr[0-9]\|KNAME'); do
+        parted "/dev/${BLOCK_DEVICE}" print free >> "${BACKUP_HOME}/${DISKINFO_FILE}"
+    done
+
+    lsblk -fs >> "${BACKUP_HOME}/${DISKINFO_FILE}"
+}
+
 function backup_root_filesystem {
     rsync \
       --archive \
@@ -22,16 +32,8 @@ function backup_root_filesystem {
       --exclude="${BACKUP_HOME}/*" \
       --exclude-from="${BASEDIR}/exclude-files.txt" \
       / $RSYNC_DIR >> ${BACKUP_HOME}/error.log-${TIMESTAMP} 2>&1
-}
-
-function save_diskinfo {
-    [[ -f "${BACKUP_HOME}/${DISKINFO_FILE}" ]] && return
-
-    for BLOCK_DEVICE in $(lsblk -d -o KNAME | grep -v 'sr[0-9]\|KNAME'); do
-        parted "/dev/${BLOCK_DEVICE}" print free >> "${BACKUP_HOME}/${DISKINFO_FILE}"
-    done
-
-    lsblk -fs >> "${BACKUP_HOME}/${DISKINFO_FILE}"
+   
+    save_diskinfo
 }
 
 function create_backup_tarball {
@@ -51,8 +53,6 @@ function create_backup_tarball {
 
 [[ -d "$BACKUP_HOME" ]] || mkdir -p "$BACKUP_HOME"
 [[ -d "$RSYNC_DIR" ]] || mkdir -p "$RSYNC_DIR"
-
-save_diskinfo
 
 [[ "$1" == "backup" ]] && backup_root_filesystem
 [[ "$1" == "tar" ]] && create_backup_tarball
