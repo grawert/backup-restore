@@ -3,6 +3,7 @@
 BASEDIR=$(dirname $0)
 source ${BASEDIR}/config.sh
 DISK="${BACKUP_HOME}/restore.qcow2"
+EFI_FIRMWARE="/usr/share/qemu/ovmf-x86_64-code.bin"
 
 if [[ $DISK =~ \.(.+)$ ]]; then
     DISK_FORMAT=${BASH_REMATCH[1]}
@@ -16,13 +17,14 @@ fi
 qemu-system-x86_64 \
  -no-user-config \
  -nographic \
+ -net none \
  -m 1024 \
  -enable-kvm \
  -name "restore-to-vm" \
- -bios /usr/share/qemu/ovmf-x86_64-code.bin \
+ -bios "${EFI_FIRMWARE}" \
  -device virtio-serial-pci \
  -serial mon:stdio \
- -drive file=${RESTORE_ISO_FILE},format=raw,if=none,readonly=on,id=cd0 \
+ -drive file="${RESTORE_ISO_FILE}",format=raw,if=none,readonly=on,id=cd0 \
  -device ide-cd,bus=ide.0,unit=0,drive=cd0,id=ide0-0-0,bootindex=3 \
- -drive file=${DISK},format=${DISK_FORMAT},if=none,id=d0 \
+ -drive file="${DISK}",format=${DISK_FORMAT},if=none,id=d0 \
  -device virtio-blk-pci,drive=d0,id=vda,bootindex=2
