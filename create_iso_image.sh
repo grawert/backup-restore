@@ -40,9 +40,13 @@ function copy_restore_files_to_image {
     SCRIPTSDIR="${GRML_DIR}/scripts"
 
     mkdir -p "${SCRIPTSDIR}"
+
     rsync -a --update "${BASEDIR}/restore.sh" "${SCRIPTSDIR}/00-restore.sh"
     chmod 0755 "${SCRIPTSDIR}/00-restore.sh"
 
+    rsync -a --update "${BASEDIR}/udev-net.rules" "${GRML_DIR}/udev-net.rules"
+
+    chmod 0755 "${SCRIPTSDIR}/00-restore.sh"
     rsync -a --update \
         "${BACKUP_HOME}/${DISKINFO_FILE}" \
         "${GRML_DIR}/${DISKINFO_FILE}"

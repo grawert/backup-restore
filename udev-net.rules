@@ -1,0 +1,8 @@
+## This file has been created on restore
+## network cards on admin.os4.eu-de-1.cc.cloud.sap
+
+# PCI device 0x1137:0x0043 (enic)
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:25:b5:a0:00:fe", ATTR{dev_id}=="0x0", ATTR{type}=="1", KERNEL=="eth*", NAME="eth0"
+ROT1: c5161225@admin (admin):/backup/adminnode
+# PCI device 0x1137:0x0043 (enic)
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:25:b5:b0:02:d0", ATTR{dev_id}=="0x0", ATTR{type}=="1", KERNEL=="eth*", NAME="eth1"

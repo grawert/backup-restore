@@ -73,6 +73,8 @@ ${DISK}1             /boot/efi            vfat       umask=0002,utf8=true  0 0
 /dev/systemVG/LVvar  /var                 ext4       defaults              1 2
 EOF
 
+cp -f "${GRML_DCSDIR}/udev-net.rules" "${ROOTFS_MOUNT}/etc/udev/rules.d/70-persistent-net.rules"
+
 for KERNEL in $(ls $ROOTFS_MOUNT/boot/vmlinuz-*); do
     [[ $KERNEL =~ vmlinuz-(.*) ]] || { echo "Could not extract Kernel version"; exit 1; }
     KERNEL_VERSION=${BASH_REMATCH[1]}
