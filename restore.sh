@@ -57,6 +57,8 @@ cat ${BACKUP}* | tar \
     --extract \
     --acls \
     --xattrs \
+    --xattrs-include=security.selinux \
+    --xattrs-include=security.capability \
     --directory="${ROOTFS_MOUNT}" \
     --file=-
 

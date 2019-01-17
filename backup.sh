@@ -22,7 +22,10 @@ function save_diskinfo {
     lsblk -fs >> "${BACKUP_HOME}/${DISKINFO_FILE}"
 }
 
-function backup_root_filesystem {
+function backup_root_filesystem_with_rsync {
+
+    [[ -d "$RSYNC_DIR" ]] || mkdir -p "$RSYNC_DIR"
+
     rsync \
       --archive \
       --xattrs \
@@ -36,12 +39,14 @@ function backup_root_filesystem {
     save_diskinfo
 }
 
-function create_backup_tarball {
+function create_backup_tarball_from_rsync {
     tar \
       --create \
       --gzip \
       --acls \
       --xattrs \
+      --xattrs-include=security.selinux \
+      --xattrs-include=security.capability \
       --force-local \
       --label="${FQDN}-${TIMESTAMP}" \
       --file="${BACKUP_HOME}/${TARBALL}" \
@@ -51,8 +56,27 @@ function create_backup_tarball {
     ln --symbolic --force "${BACKUP_HOME}/${TARBALL}" "${BACKUP_HOME}/${LATEST_BACKUP}"
 }
 
-[[ -d "$BACKUP_HOME" ]] || mkdir -p "$BACKUP_HOME"
-[[ -d "$RSYNC_DIR" ]] || mkdir -p "$RSYNC_DIR"
+function backup_root_filesystem_with_tar {
+    tar \
+      --create \
+      --gzip \
+      --acls \
+      --xattrs \
+      --xattrs-include=security.selinux \
+      --xattrs-include=security.capability \
+      --force-local \
+      --label="${FQDN}-${TIMESTAMP}" \
+      --exclude="${BACKUP_HOME}/*" \
+      --exclude-from="${BASEDIR}/exclude-files.txt" \
+      --file="${BACKUP_HOME}/${TARBALL}" \
+      --directory="/" . \
+      >> ${BACKUP_HOME}/error.log-${TIMESTAMP} 2>&1
 
-[[ "$1" == "backup" ]] && backup_root_filesystem
-[[ "$1" == "tar" ]] && create_backup_tarball
+    ln --symbolic --force "${BACKUP_HOME}/${TARBALL}" "${BACKUP_HOME}/${LATEST_BACKUP}"
+}
+
+[[ -d "$BACKUP_HOME" ]] || mkdir -p "$BACKUP_HOME"
+
+[[ "$1" == "rsync" ]] && backup_root_filesystem_with_rsync
+[[ "$1" == "backup" ]] && backup_root_filesystem_with_tar
+[[ "$1" == "tar" ]] && create_backup_tarball_from_rsync
