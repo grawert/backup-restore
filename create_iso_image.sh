@@ -46,7 +46,7 @@ function copy_restore_files_to_image {
     rsync -a --update "${BASEDIR}/restore-network-udev-rules.sh" \
                       "${SCRIPTSDIR}/20-network.sh"
 
-    chmod 0755 "${SCRIPTSDIR}/*.sh"
+    chmod 0755 ${SCRIPTSDIR}/*.sh
 
     rsync -a --update \
         "${BACKUP_HOME}/${DISKINFO_FILE}" \
