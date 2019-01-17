@@ -11,7 +11,7 @@ set -e
 set -x
 
 function unpack_grml_iso {
-    mkdir -p "$GRML_DIR"
+    mkdir -p "${GRML_DIR}"
 
     MOUNTDIR=$(mktemp -d)
 
@@ -42,11 +42,12 @@ function copy_restore_files_to_image {
     mkdir -p "${SCRIPTSDIR}"
 
     rsync -a --update "${BASEDIR}/restore.sh" "${SCRIPTSDIR}/00-restore.sh"
-    chmod 0755 "${SCRIPTSDIR}/00-restore.sh"
 
-    rsync -a --update "${BASEDIR}/udev-net.rules" "${GRML_DIR}/udev-net.rules"
+    rsync -a --update "${BASEDIR}/restore-network-udev-rules.sh" \
+                      "${SCRIPTSDIR}/20-network.sh"
 
-    chmod 0755 "${SCRIPTSDIR}/00-restore.sh"
+    chmod 0755 "${SCRIPTSDIR}/*.sh"
+
     rsync -a --update \
         "${BACKUP_HOME}/${DISKINFO_FILE}" \
         "${GRML_DIR}/${DISKINFO_FILE}"
