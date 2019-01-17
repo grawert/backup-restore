@@ -47,6 +47,7 @@ function create_backup_tarball_from_rsync {
       --xattrs \
       --xattrs-include=security.selinux \
       --xattrs-include=security.capability \
+      --anchored \
       --force-local \
       --label="${FQDN}-${TIMESTAMP}" \
       --file="${BACKUP_HOME}/${TARBALL}" \
@@ -64,12 +65,13 @@ function backup_root_filesystem_with_tar {
       --xattrs \
       --xattrs-include=security.selinux \
       --xattrs-include=security.capability \
+      --anchored \
       --force-local \
       --label="${FQDN}-${TIMESTAMP}" \
       --exclude="${BACKUP_HOME}/*" \
       --exclude-from="${BASEDIR}/exclude-files.txt" \
       --file="${BACKUP_HOME}/${TARBALL}" \
-      --directory="/" . \
+      "/" \
       >> ${BACKUP_HOME}/error.log-${TIMESTAMP} 2>&1
 
     ln --symbolic --force "${BACKUP_HOME}/${TARBALL}" "${BACKUP_HOME}/${LATEST_BACKUP}"
