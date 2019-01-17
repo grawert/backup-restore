@@ -20,3 +20,5 @@ for interface in $interfaces; do
 
     echo "${UDEV_RULE}" >> $UDEV_RULES_FILE
 done
+
+echo "Please check network interface configuration at ${UDEV_RULES_FILE}"
