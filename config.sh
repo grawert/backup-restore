@@ -22,7 +22,5 @@ ISO_MAX_FILE_SIZE="2G"
 
 [[ -x $(command -v tar) ]] || { echo "tar is not installed!"; exit 1; }
 [[ -x $(command -v date) ]] || { echo "date is not installed!"; exit 1; }
-[[ -x $(command -v rsync) ]] || { echo "rsnyc is not installed!"; exit 1; }
 [[ -x $(command -v lsblk) ]] || { echo "lsblk is not installed!"; exit 1; }
 [[ -x $(command -v parted) ]] || { echo "parted is not installed!"; exit 1; }
-[[ -x $(command -v mkisofs) ]] || { echo "mkisofs is not installed!"; exit 1; }

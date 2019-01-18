@@ -72,6 +72,8 @@ function create_restore_iso {
      "${GRML_DIR}"
 }
 
+[[ -x $(command -v mkisofs) ]] || { echo "mkisofs is not installed!"; exit 1; }
+
 [[ -d "${GRML_DIR}" ]] || unpack_grml_iso
 
 set_boot_parameters
