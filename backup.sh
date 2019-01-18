@@ -43,4 +43,5 @@ function backup_root_filesystem_with_tar {
 
 [[ -d "$BACKUP_HOME" ]] || mkdir -p "$BACKUP_HOME"
 
+save_diskinfo
 backup_root_filesystem_with_tar
