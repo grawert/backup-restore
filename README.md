@@ -1,8 +1,7 @@
 # File Based Backup & Restore
 
-Scripts to make a file based backup of a Linux filesystem using _rsync_ and
-_tar_. Restore is using a [GRML](http://grml.org/) rescue image containing the
-backup tarball.
+Scripts to make a file based backup of a Linux filesystem using _tar_. Restore
+is using a [GRML](http://grml.org/) rescue image containing the backup tarball.
 
 ## Configuration
 
@@ -20,16 +19,11 @@ curl -O -L http://download.grml.org/grml64-small_2017.05.iso
 
 ## Backup
 
-Create a backup of the filesystem with rsync. The parameter `backup` is creating
-a backup tree of the filesystem at `BACKUP_HOME`. The parameter `tar` will
-create a tarball of the backup tree which is saved to `BACKUP_HOME` directory.
+Create a backup of the filesystem with _tar_ which is saved to `BACKUP_HOME`
+directory.
 
 ```shell
-bash backup.sh backup
-```
-
-```shell
-bash backup.sh tar
+sudo bash backup.sh
 ```
 
 ## Adapt _restore.sh_
@@ -54,7 +48,7 @@ bash create_iso_image.sh
 
 # Boot rescue image using qemu
 
-For testing purposes the restore image can be booted in isolated environment
+For restore testing the restore image can be booted in isolated environment
 using qemu. The network interface configuration might have to be adapted.
 
 ```shell
