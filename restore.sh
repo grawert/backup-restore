@@ -7,7 +7,6 @@ ROOTFS_MOUNT='/mnt'
 GRML_DCSDIR='/lib/live/mount/medium'
 BACKUP="${GRML_DCSDIR}/backup"
 EXT4_FEATURES='^metadata_csum'
-GRUB_EFI_CFG='/boot/efi/EFI/BOOT/grub.cfg'
 
 parted $DISK mklabel gpt
 parted $DISK mkpart primary fat16 1M    213M	# /boot/efi
@@ -81,6 +80,5 @@ for KERNEL in $(ls $ROOTFS_MOUNT/boot/vmlinuz-*); do
     chroot "${ROOTFS_MOUNT}" dracut --force --kver "${KERNEL_VERSION}"
 done
 
-chroot "${ROOTFS_MOUNT}" grub2-mkconfig -o "${GRUB_EFI_CFG}"
 chroot "${ROOTFS_MOUNT}" grub2-mkconfig -o /boot/grub2/grub.cfg
 chroot "${ROOTFS_MOUNT}" grub2-install $DISK
