@@ -12,7 +12,7 @@ else
 fi
 
 [[ -z "$1" ]] || DISK=$1
-[[ -z "$2" ]] || ISO_IMAGE=$2
+[[ -z "$2" ]] || RESTORE_ISO_FILE=$2
 
 qemu-system-x86_64 \
  -no-user-config \
