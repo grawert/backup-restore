@@ -23,11 +23,10 @@ bash backup.sh
 ### Adapt _restore.sh_
 
 The _restore.sh_ script is executed automatically when the restore ISO image
-is booting. The script is creating partition tables and filesystems. It is
-configured to recreate the admin nodes for CCIE environments.
+is booting. The script is creating partition tables and filesystems.
 
-If this is not suitable the _restore.sh_ script needs to be adapted before
-creating the rescue ISO image. Partition and filesystem informations of the
+The _restore.sh_ script needs to be adapted before creating the rescue ISO
+image. Partition and filesystem informations of the
 backed up system is stored at `BACKUP_HOME`/diskinfo.txt.
 
 ### Create the rescue image
